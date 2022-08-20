@@ -8,10 +8,11 @@ int main()
     // INITIALIZE THE WINDOW
     InitWindow(windowWidth, windowHeight, title);
 
-    // rectangle dimensions
-    const int width{50}, height{80};
-    int posY{windowHeight - height}, velocity{0};
+    // rectangle variables
+    const int playerWidth{50}, playerHeight{80}, gravity{1}, jumpVelocity{-22};
+    int posY{windowHeight - playerHeight}, velocity{0};
 
+    bool isInAir{false};
 
 
     SetTargetFPS(60);
@@ -21,14 +22,30 @@ int main()
         BeginDrawing();
         ClearBackground(WHITE);
 
-        if(IsKeyPressed(KEY_SPACE))
+
+        // ground check
+        if(posY >= windowHeight - playerHeight)
         {
-            velocity -= 10;
+            velocity = 0;
+            isInAir = false;
+        }
+        else
+        {
+            // apply gravity
+            velocity += gravity;
+            isInAir = true;
+        }
+        
+        // jump
+        if(IsKeyPressed(KEY_SPACE) && !isInAir)
+        {
+            velocity += jumpVelocity;
         }
 
+        // update position
         posY += velocity;
 
-        DrawRectangle(windowWidth/2, posY, width, height, BLUE);
+        DrawRectangle(windowWidth/2, posY, playerWidth, playerHeight, BLUE);
         
         
         
