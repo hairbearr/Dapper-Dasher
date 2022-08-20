@@ -15,22 +15,25 @@ int main()
 
     // player variables
     Texture2D scarfy = LoadTexture("textures/scarfy.png");
-    Rectangle scarfyRectangle { 0.0, 0.0, scarfy.width/6, scarfy.height };
+    Rectangle scarfyRectangle { 0.0, 0.0, (scarfy.width/6.0f), (scarfy.height * 1.0F) };
     Vector2 scarfyPosition { windowWidth/2 - scarfyRectangle.width/2, windowHeight - scarfyRectangle.height };
 
+    bool isInAir{false};
+    int playerFrame{}; // player animation frame
+    const float playerUpdateTime{ 1.0 / 12.0 }; // amount of time before we update the player animation frame
+    float playerRunningTime{};
+    
     // hazard variables
     // nebula
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
-    Rectangle nebulaRectangle { 0.0, 0.0, nebula.width/8, nebula.height/8 };
+    Rectangle nebulaRectangle { 0.0, 0.0, (nebula.width / 8.0f), (nebula.height/8.0f) };
     Vector2 nebulaPosition{ windowWidth, windowHeight - nebulaRectangle.height };
 
-    int nebulaVelocity{-600}; // nebula X velocity in pixels per second
+    int nebulaVelocity{-300}; // nebula X velocity in pixels per second
 
-    // gameplay variables
-    bool isInAir{false};
-    int frame{}; //animation frame
-    const float updateTime{1.0/12.0}; // amount of time before we update the animation frame
-    float runningTime{};
+    int nebulaFrame{};
+    const float nebulaUpdateTime{ 1.0 / 12.0 };
+    float nebulaRunningTime{};    
     
     // Set the target FPS
     SetTargetFPS(60);
@@ -38,9 +41,6 @@ int main()
     {
         // delta time (time since last frame)
         const float deltaTime{ GetFrameTime() };
-
-        // update the running time
-        runningTime += deltaTime;
 
         // START DRAWING WINDOW
         BeginDrawing();
@@ -64,29 +64,49 @@ int main()
         {
             velocity += jumpVelocity;
         }
+        
+        // update scarfy's Y position
+        scarfyPosition.y += velocity * deltaTime;
+
+        // update the player's animation
+        if(!isInAir)
+        {
+            // update the running time
+            playerRunningTime += deltaTime;
+            if(playerRunningTime >= playerUpdateTime)
+            {
+                playerRunningTime = 0.0;
+
+                // update animation frame
+                scarfyRectangle.x = playerFrame * scarfyRectangle.width;
+                playerFrame++;
+                if(playerFrame>5)
+                {
+                    playerFrame = 0;
+                }
+            }
+        }
 
         // update nebula position
         nebulaPosition.x += nebulaVelocity * deltaTime;
 
-        // update scarfy's Y position
-        scarfyPosition.y += velocity * deltaTime;
+        // update the nebula's running time
+        nebulaRunningTime +=deltaTime;
 
-
-        if(!isInAir)
+        // update the nebula's animation
+        if(nebulaRunningTime >= nebulaUpdateTime)
         {
-            if(runningTime >= updateTime)
-            {
-                runningTime = 0.0;
+            nebulaRunningTime = 0.0;
 
-                // update animation frame
-                scarfyRectangle.x = frame * scarfyRectangle.width;
-                frame++;
-                if(frame>5)
-                {
-                    frame = 0;
-                }
+            // update animation frame
+            nebulaRectangle.x = nebulaFrame * nebulaRectangle.width;
+            nebulaFrame++;
+            if(nebulaFrame > 7)
+            {
+                nebulaFrame = 0;
             }
         }
+
         // Draw nebula
         DrawTextureRec(nebula, nebulaRectangle, nebulaPosition, WHITE);
 
