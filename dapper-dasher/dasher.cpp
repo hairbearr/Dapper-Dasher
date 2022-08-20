@@ -8,9 +8,21 @@ int main()
     // INITIALIZE THE WINDOW
     InitWindow(windowWidth, windowHeight, title);
 
-    // player variables
-    const int playerWidth{50}, playerHeight{80}, gravity{1}, jumpVelocity{-22};
-    int posY{windowHeight - playerHeight}, velocity{0};
+    // gravity variables
+    const int gravity{1}, jumpVelocity{-22};
+    int velocity{0};
+
+
+    // player variables.
+    Texture2D scarfy = LoadTexture("textures/scarfy.png");
+    Rectangle scarfyRectangle;
+    scarfyRectangle.width = scarfy.width/6;
+    scarfyRectangle.height = scarfy.height;
+    scarfyRectangle.x = 0;
+    scarfyRectangle.y = 0;
+    Vector2 scarfyPosition;
+    scarfyPosition.x = windowWidth/2 - scarfyRectangle.width/2;
+    scarfyPosition.y = windowHeight - scarfyRectangle.height;
 
     bool isInAir{false};
 
@@ -24,7 +36,7 @@ int main()
 
 
         // ground check
-        if(posY >= windowHeight - playerHeight)
+        if(scarfyPosition.y >= windowHeight - scarfyRectangle.height)
         {
             velocity = 0;
             isInAir = false;
@@ -43,9 +55,9 @@ int main()
         }
 
         // update position
-        posY += velocity;
+        scarfyPosition.y += velocity;
 
-        DrawRectangle(windowWidth/2, posY, playerWidth, playerHeight, BLUE);
+        DrawTextureRec(scarfy, scarfyRectangle, scarfyPosition, WHITE);
         
         
         
@@ -57,5 +69,7 @@ int main()
         EndDrawing();
     }
 
+    //unload the texture, shutting things down properly
+    UnloadTexture(scarfy);
     CloseWindow();
 }
