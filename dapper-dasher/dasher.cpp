@@ -31,14 +31,8 @@ int main()
         { 1.0 / 12.0 },                                                                               // float updateTime
         { 0.0 }                                                                                       // float runningTime
     };
-
-    Rectangle scarfyRectangle { 0.0, 0.0, (scarfy.width/6.0f), (scarfy.height * 1.0F) };
-    Vector2 scarfyPosition { windowWidth/2 - scarfyRectangle.width/2, windowHeight - scarfyRectangle.height };
-
+    
     bool isInAir{false};
-    int playerFrame{}; // player animation frame
-    const float playerUpdateTime{ 1.0 / 12.0 }; // amount of time before we update the player animation frame
-    float playerRunningTime{};
     
     // hazard variables
     // nebula
@@ -63,22 +57,7 @@ int main()
         { 0.0 }                                                        // float runningTime
     };
 
-
-    Rectangle nebulaRectangle { 0.0, 0.0, (nebula.width / 8.0f), (nebula.height/8.0f) };
-    Vector2 nebulaPosition{ windowWidth, windowHeight - nebulaRectangle.height };
-
-    Rectangle nebula2Rectangle { 0.0, 0.0, (nebula.width / 8.0f), (nebula.height/8.0f) };
-    Vector2 nebula2Position {windowWidth+300, windowHeight - nebulaRectangle.height};
-
     int nebulaVelocity{-300}; // nebula X velocity in pixels per second
-
-    int nebulaFrame{};
-    const float nebulaUpdateTime{ 1.0 / 12.0 };
-    float nebulaRunningTime{};
-
-    int nebula2Frame{};
-    const float nebula2UpdateTime{1.0/16.0};
-    float nebula2RunningTime{};
     
     // Set the target FPS
     SetTargetFPS(60);
@@ -92,7 +71,7 @@ int main()
         ClearBackground(WHITE);
 
         // ground check
-        if(scarfyPosition.y >= windowHeight - scarfyRectangle.height)
+        if(scarfyData.position.y >= windowHeight - scarfyData.rectangle.height)
         {
             velocity = 0;
             isInAir = false;
@@ -111,74 +90,74 @@ int main()
         }
         
         // update scarfy's Y position
-        scarfyPosition.y += velocity * deltaTime;
+        scarfyData.position.y += velocity * deltaTime;
 
         // update the player's animation
         if(!isInAir)
         {
             // update the running time
-            playerRunningTime += deltaTime;
-            if(playerRunningTime >= playerUpdateTime)
+            scarfyData.runningTime += deltaTime;
+            if(scarfyData.runningTime >= scarfyData.updateTime)
             {
-                playerRunningTime = 0.0;
+                scarfyData.runningTime = 0.0;
 
                 // update animation frame
-                scarfyRectangle.x = playerFrame * scarfyRectangle.width;
-                playerFrame++;
-                if(playerFrame>5)
+                scarfyData.rectangle.x = scarfyData.frame * scarfyData.rectangle.width;
+                scarfyData.frame++;
+                if(scarfyData.frame>5)
                 {
-                    playerFrame = 0;
+                    scarfyData.frame = 0;
                 }
             }
         }
 
         // update nebula position
-        nebulaPosition.x += nebulaVelocity * deltaTime;
+        nebulaData.position.x += nebulaVelocity * deltaTime;
 
         // update the second nebula's position
-        nebula2Position.x += nebulaVelocity * deltaTime;
+        nebula2Data.position.x += nebulaVelocity * deltaTime;
 
         // update the nebula's running time
-        nebulaRunningTime +=deltaTime;
+        nebulaData.runningTime +=deltaTime;
 
         // update the nebula's animation
-        if(nebulaRunningTime >= nebulaUpdateTime)
+        if(nebulaData.runningTime >= nebulaData.updateTime)
         {
-            nebulaRunningTime = 0.0;
+            nebulaData.runningTime = 0.0;
 
             // update animation frame
-            nebulaRectangle.x = nebulaFrame * nebulaRectangle.width;
-            nebulaFrame++;
-            if(nebulaFrame > 7)
+            nebulaData.rectangle.x = nebulaData.frame * nebulaData.rectangle.width;
+            nebulaData.frame++;
+            if(nebulaData.frame > 7)
             {
-                nebulaFrame = 0;
+                nebulaData.frame = 0;
             }
         }
 
         // update the nebula's running time
-        nebula2RunningTime += deltaTime;
+        nebula2Data.runningTime += deltaTime;
 
         // update the nebula's animation
-        if(nebula2RunningTime >= nebula2UpdateTime)
+        if(nebula2Data.runningTime >= nebula2Data.updateTime)
         {
-            nebula2RunningTime = 0.0;
+            nebula2Data.runningTime = 0.0;
 
             // update animation frame
-            nebula2Rectangle.x = nebula2Frame * nebula2Rectangle.width;
-            nebula2Frame++;
-            if(nebula2Frame > 7)
+            nebula2Data.rectangle.x = nebula2Data.frame * nebula2Data.rectangle.width;
+            nebula2Data.frame++;
+            if(nebula2Data.frame > 7)
             {
-                nebula2Frame = 0;
+                nebula2Data.frame = 0;
             }
         }
 
         // Draw nebula
-        DrawTextureRec(nebula, nebulaRectangle, nebulaPosition, WHITE);
+        DrawTextureRec(nebula, nebulaData.rectangle, nebulaData.position, WHITE);
         // draw second nebula
-        DrawTextureRec(nebula, nebula2Rectangle, nebula2Position, WHITE);
+        DrawTextureRec(nebula, nebula2Data.rectangle, nebula2Data.position, WHITE);
 
         // Draw the player character
-        DrawTextureRec(scarfy, scarfyRectangle, scarfyPosition, WHITE);
+        DrawTextureRec(scarfy, scarfyData.rectangle, scarfyData.position, WHITE);
        
         // STOP DRAWING WINDOW
         EndDrawing();
