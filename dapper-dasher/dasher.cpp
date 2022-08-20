@@ -23,17 +23,15 @@ int main()
 
     // player variables
     Texture2D scarfy = LoadTexture("textures/scarfy.png");
-    AnimationData scarfyData;
-    scarfyData.rectangle.width = scarfy.width/6.0f;
-    scarfyData.rectangle.height = scarfy.height;
-    scarfyData.rectangle.x = 0.0;
-    scarfyData.rectangle.y = 0.0;
-    scarfyData.position.x = windowWidth/2 - scarfyData.rectangle.width/2;
-    scarfyData.position.y = windowHeight - scarfyData.rectangle.height;
-    scarfyData.frame = 0;
-    scarfyData.updateTime = 1.0 / 12.0;
-    scarfyData.runningTime = 0.0;
-    
+    AnimationData scarfyData
+    {
+        { 0.0, 0.0, ( scarfy.width / 6.0f ), ( scarfy.height * 1.0F ) },                              // Rectangle rectangle
+        { windowWidth/2 - scarfyData.rectangle.width/2, windowHeight - scarfyData.rectangle.height }, // Vector2 position
+        { 0 },                                                                                        // int frame
+        { 1.0 / 12.0 },                                                                               // float updateTime
+        { 0.0 }                                                                                       // float runningTime
+    };
+
     Rectangle scarfyRectangle { 0.0, 0.0, (scarfy.width/6.0f), (scarfy.height * 1.0F) };
     Vector2 scarfyPosition { windowWidth/2 - scarfyRectangle.width/2, windowHeight - scarfyRectangle.height };
 
@@ -45,6 +43,27 @@ int main()
     // hazard variables
     // nebula
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
+
+    // AnimationData for nebula
+    AnimationData nebulaData
+    {
+        { 0.0, 0.0, ( nebula.width / 8.0f ), ( nebula.height/8.0f ) }, // Rectangle rectangle
+        { windowWidth, windowHeight - nebula.height / 8.0f },          // Vector2 position
+        { 0 },                                                         // int frame
+        { 1.0 / 12.0 },                                                // float updateTime
+        { 0.0 }                                                        // float runningTime
+    };
+
+    AnimationData nebula2Data
+    {
+        { 0.0, 0.0, ( nebula.width / 8.0f ), ( nebula.height/8.0f ) }, // Rectangle rectangle
+        { windowWidth + 300, windowHeight - nebula.height/8.0f },      // Vector2 position
+        { 0 },                                                         // int frame
+        { 1.0 / 16.0 },                                                // float updateTime     
+        { 0.0 }                                                        // float runningTime
+    };
+
+
     Rectangle nebulaRectangle { 0.0, 0.0, (nebula.width / 8.0f), (nebula.height/8.0f) };
     Vector2 nebulaPosition{ windowWidth, windowHeight - nebulaRectangle.height };
 
