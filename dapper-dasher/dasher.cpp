@@ -29,11 +29,18 @@ int main()
     Rectangle nebulaRectangle { 0.0, 0.0, (nebula.width / 8.0f), (nebula.height/8.0f) };
     Vector2 nebulaPosition{ windowWidth, windowHeight - nebulaRectangle.height };
 
+    Rectangle nebula2Rectangle { 0.0, 0.0, (nebula.width / 8.0f), (nebula.height/8.0f) };
+    Vector2 nebula2Position {windowWidth+300, windowHeight - nebulaRectangle.height};
+
     int nebulaVelocity{-300}; // nebula X velocity in pixels per second
 
     int nebulaFrame{};
     const float nebulaUpdateTime{ 1.0 / 12.0 };
-    float nebulaRunningTime{};    
+    float nebulaRunningTime{};
+
+    int nebula2Frame{};
+    const float nebula2UpdateTime{1.0/16.0};
+    float nebula2RunningTime{};
     
     // Set the target FPS
     SetTargetFPS(60);
@@ -90,6 +97,9 @@ int main()
         // update nebula position
         nebulaPosition.x += nebulaVelocity * deltaTime;
 
+        // update the second nebula's position
+        nebula2Position.x += nebulaVelocity * deltaTime;
+
         // update the nebula's running time
         nebulaRunningTime +=deltaTime;
 
@@ -107,8 +117,27 @@ int main()
             }
         }
 
+        // update the nebula's running time
+        nebula2RunningTime += deltaTime;
+
+        // update the nebula's animation
+        if(nebula2RunningTime >= nebula2UpdateTime)
+        {
+            nebula2RunningTime = 0.0;
+
+            // update animation frame
+            nebula2Rectangle.x = nebula2Frame * nebula2Rectangle.width;
+            nebula2Frame++;
+            if(nebula2Frame > 7)
+            {
+                nebula2Frame = 0;
+            }
+        }
+
         // Draw nebula
         DrawTextureRec(nebula, nebulaRectangle, nebulaPosition, WHITE);
+        // draw second nebula
+        DrawTextureRec(nebula, nebula2Rectangle, nebula2Position, WHITE);
 
         // Draw the player character
         DrawTextureRec(scarfy, scarfyRectangle, scarfyPosition, WHITE);
