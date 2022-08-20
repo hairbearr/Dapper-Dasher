@@ -8,7 +8,7 @@ int main()
     // INITIALIZE THE WINDOW
     InitWindow(windowWidth, windowHeight, title);
 
-    // rectangle variables
+    // player variables
     const int playerWidth{50}, playerHeight{80}, gravity{1}, jumpVelocity{-22};
     int posY{windowHeight - playerHeight}, velocity{0};
 
