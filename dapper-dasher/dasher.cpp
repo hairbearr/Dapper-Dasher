@@ -10,11 +10,14 @@ struct AnimationData
 
 int main()
 {
+    int windowDimensions[2];
+    windowDimensions[0] = 512;
+    windowDimensions[1] = 450;
     // window variables
-    const int windowWidth{512}, windowHeight{450};
+    //const int windowDimensions[0]{512}, windowDimensions[1]{450};
     const char * title = "Dapper Dasher!";
     // INITIALIZE THE WINDOW
-    InitWindow(windowWidth, windowHeight, title);
+    InitWindow(windowDimensions[0], windowDimensions[1], title);
 
     // gravity variables
     const int gravity{ 1'000 }; // accelleration due to gravity in (pixels per second ) per second
@@ -26,7 +29,7 @@ int main()
     AnimationData scarfyData
     {
         { 0.0, 0.0, ( scarfy.width / 6.0f ), ( scarfy.height * 1.0F ) },                              // Rectangle rectangle
-        { windowWidth/2 - scarfyData.rectangle.width/2, windowHeight - scarfyData.rectangle.height }, // Vector2 position
+        { windowDimensions[0]/2 - scarfyData.rectangle.width/2, windowDimensions[1] - scarfyData.rectangle.height }, // Vector2 position
         { 0 },                                                                                        // int frame
         { 1.0 / 12.0 },                                                                               // float updateTime
         { 0.0 }                                                                                       // float runningTime
@@ -42,7 +45,7 @@ int main()
     AnimationData nebulaData
     {
         { 0.0, 0.0, ( nebula.width / 8.0f ), ( nebula.height/8.0f ) }, // Rectangle rectangle
-        { windowWidth, windowHeight - nebula.height / 8.0f },          // Vector2 position
+        { windowDimensions[0], windowDimensions[1] - nebula.height / 8.0f },          // Vector2 position
         { 0 },                                                         // int frame
         { 1.0 / 12.0 },                                                // float updateTime
         { 0.0 }                                                        // float runningTime
@@ -51,7 +54,7 @@ int main()
     AnimationData nebula2Data
     {
         { 0.0, 0.0, ( nebula.width / 8.0f ), ( nebula.height/8.0f ) }, // Rectangle rectangle
-        { windowWidth + 300, windowHeight - nebula.height/8.0f },      // Vector2 position
+        { windowDimensions[0] + 300, windowDimensions[1] - nebula.height/8.0f },      // Vector2 position
         { 0 },                                                         // int frame
         { 1.0 / 16.0 },                                                // float updateTime     
         { 0.0 }                                                        // float runningTime
@@ -71,7 +74,7 @@ int main()
         ClearBackground(WHITE);
 
         // ground check
-        if(scarfyData.position.y >= windowHeight - scarfyData.rectangle.height)
+        if(scarfyData.position.y >= windowDimensions[1] - scarfyData.rectangle.height)
         {
             velocity = 0;
             isInAir = false;
