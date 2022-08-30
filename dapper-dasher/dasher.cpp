@@ -35,7 +35,7 @@ int main()
 {
     int windowDimensions[2];
     windowDimensions[0] = 512;
-    windowDimensions[1] = 450;
+    windowDimensions[1] = 380;
     // window variables
     //const int windowDimensions[0]{512}, windowDimensions[1]{450};
     const char * title = "Dapper Dasher!";
@@ -83,6 +83,9 @@ int main()
 
     int nebulaVelocity{-300}; // nebula X velocity in pixels per second
     
+    Texture2D background = LoadTexture("textures/far-buildings.png");
+    float backgroundX{};
+
     // Set the target FPS
     SetTargetFPS(60);
     while(!WindowShouldClose())
@@ -93,6 +96,12 @@ int main()
         // START DRAWING WINDOW
         BeginDrawing();
         ClearBackground(WHITE);
+
+        backgroundX -= 20 * deltaTime;
+
+        Vector2 backgroundPosition{backgroundX, 0.0};
+        // draw the background
+        DrawTextureEx( background, backgroundPosition, 0.0, 2.0, WHITE );
 
         // ground check
         if(isOnGround(scarfyData, windowDimensions[1]))
@@ -149,5 +158,6 @@ int main()
     //unload the texture, shutting things down properly
     UnloadTexture(scarfy);
     UnloadTexture(nebula);
+    UnloadTexture(background);
     CloseWindow();
 }
