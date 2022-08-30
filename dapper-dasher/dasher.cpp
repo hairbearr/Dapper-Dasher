@@ -8,6 +8,11 @@ struct AnimationData
     float updateTime, runningTime;
 };
 
+bool isOnGround(AnimationData data, int windowHeight)
+{
+    return data.position.y >= windowHeight - data.rectangle.height;
+}
+
 int main()
 {
     int windowDimensions[2];
@@ -72,7 +77,7 @@ int main()
         ClearBackground(WHITE);
 
         // ground check
-        if(scarfyData.position.y >= windowDimensions[1] - scarfyData.rectangle.height)
+        if(isOnGround(scarfyData, windowDimensions[1]))
         {
             velocity = 0;
             isInAir = false;
