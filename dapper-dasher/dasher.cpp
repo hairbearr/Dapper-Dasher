@@ -13,6 +13,24 @@ bool isOnGround(AnimationData data, int windowHeight)
     return data.position.y >= windowHeight - data.rectangle.height;
 }
 
+AnimationData updateAnimationData(AnimationData data, float deltaTime, int maxFrameValue)
+{
+    // update running time
+    data.runningTime += deltaTime;
+    if(data.runningTime >= data.updateTime)
+    {
+        data.runningTime = 0.0;
+        //update animation frame
+        data.rectangle.x = data.frame * data.rectangle.width;
+        data.frame++;
+        if(data.frame > maxFrameValue)
+        {
+            data.frame = 0;
+        }
+    }
+    return data;
+}
+
 int main()
 {
     int windowDimensions[2];
@@ -101,20 +119,7 @@ int main()
         // update the player's animation
         if(!isInAir)
         {
-            // update the running time
-            scarfyData.runningTime += deltaTime;
-            if(scarfyData.runningTime >= scarfyData.updateTime)
-            {
-                scarfyData.runningTime = 0.0;
-
-                // update animation frame
-                scarfyData.rectangle.x = scarfyData.frame * scarfyData.rectangle.width;
-                scarfyData.frame++;
-                if(scarfyData.frame>5)
-                {
-                    scarfyData.frame = 0;
-                }
-            }
+            scarfyData = updateAnimationData(scarfyData, deltaTime, 5);
         }
 
         for (int i = 0; i < sizeOfNebulae; i++)
@@ -125,22 +130,7 @@ int main()
 
         for (int i = 0; i < sizeOfNebulae; i++)
         {
-            // update the nebula's running time
-            nebulae[i].runningTime += deltaTime;
-
-            // update the nebula's animation
-            if(nebulae[i].runningTime >= nebulae[i].updateTime)
-            {
-                nebulae[i].runningTime = 0.0;
-
-                // update animation frame
-                nebulae[i].rectangle.x = nebulae[i].frame * nebulae[i].rectangle.width;
-                nebulae[i].frame++;
-                if(nebulae[i].frame > 7)
-                {
-                    nebulae[i].frame = 0;
-                }
-            }
+            nebulae[i] = updateAnimationData(nebulae[i], deltaTime, 7);
         }   
 
         for (int i = 0; i < sizeOfNebulae; i++)
