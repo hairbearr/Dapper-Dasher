@@ -86,6 +86,12 @@ int main()
     Texture2D background = LoadTexture("textures/far-buildings.png");
     float backgroundX{};
 
+    Texture2D midground = LoadTexture("textures/back-buildings.png");
+    float midgroundX{};
+
+    Texture2D foreground = LoadTexture("textures/foreground.png");
+    float foregroundX{};
+
     // Set the target FPS
     SetTargetFPS(60);
     while(!WindowShouldClose())
@@ -98,10 +104,41 @@ int main()
         ClearBackground(WHITE);
 
         backgroundX -= 20 * deltaTime;
+        if( backgroundX <= -background.width * 2 )
+        {
+            backgroundX = 0.0;
+        }
 
-        Vector2 backgroundPosition{backgroundX, 0.0};
+        midgroundX -= 40 * deltaTime;
+        if( midgroundX <= - midground.width * 2 )
+        {
+            midgroundX = 0.0;
+        }
+
+        foregroundX -= 80 * deltaTime;
+        if( foregroundX <= -foreground.width * 2 )
+        {
+            foregroundX = 0.0;
+        }
+
         // draw the background
-        DrawTextureEx( background, backgroundPosition, 0.0, 2.0, WHITE );
+        Vector2 backgroundOnePosition{backgroundX, 0.0};
+        DrawTextureEx( background, backgroundOnePosition, 0.0, 2.0, WHITE );
+        Vector2 backgroundTwoPosition{backgroundX + background.width * 2, 0.0};
+        DrawTextureEx( background, backgroundTwoPosition, 0.0, 2.0, WHITE );
+
+        Vector2 midgroundOnePosition{midgroundX, 0.0};
+        DrawTextureEx( midground, midgroundOnePosition, 0.0, 2.0, WHITE );
+        Vector2 midgroundTwoPosition{midgroundX + midground.width * 2, 0.0};
+        DrawTextureEx( midground, midgroundTwoPosition, 0.0, 2.0, WHITE );
+
+        Vector2 foregroundOnePosition{foregroundX, 0.0};
+        DrawTextureEx( foreground, foregroundOnePosition, 0.0, 2.0, WHITE );
+        Vector2 foregroundTwoPosition{foregroundX + foreground.width * 2, 0.0};
+        DrawTextureEx( foreground, foregroundTwoPosition, 0.0, 2.0, WHITE );
+
+
+
 
         // ground check
         if(isOnGround(scarfyData, windowDimensions[1]))
@@ -159,5 +196,7 @@ int main()
     UnloadTexture(scarfy);
     UnloadTexture(nebula);
     UnloadTexture(background);
+    UnloadTexture(midground);
+    UnloadTexture(foreground);
     CloseWindow();
 }
