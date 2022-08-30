@@ -42,25 +42,24 @@ int main()
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
 
     // AnimationData for nebula
-    AnimationData nebulaData
-    {
-        { 0.0, 0.0, ( nebula.width / 8.0f ), ( nebula.height/8.0f ) }, // Rectangle rectangle
-        { windowDimensions[0], windowDimensions[1] - nebula.height / 8.0f },          // Vector2 position
-        { 0 },                                                         // int frame
-        { 1.0 / 12.0 },                                                // float updateTime
-        { 0.0 }                                                        // float runningTime
-    };
+    AnimationData nebulae[3] {};
 
-    AnimationData nebula2Data
+    for (int i = 0; i < 3; i++)
     {
-        { 0.0, 0.0, ( nebula.width / 8.0f ), ( nebula.height/8.0f ) }, // Rectangle rectangle
-        { windowDimensions[0] + 300, windowDimensions[1] - nebula.height/8.0f },      // Vector2 position
-        { 0 },                                                         // int frame
-        { 1.0 / 16.0 },                                                // float updateTime     
-        { 0.0 }                                                        // float runningTime
-    };
+        nebulae[i].rectangle.x = 0.0;
+        nebulae[i].rectangle.y = 0.0;
+        nebulae[i].rectangle.width = nebula.width / 8.0f;
+        nebulae[i].rectangle.height = nebula.height / 8.0f;
+        nebulae[i].position.y = windowDimensions[1] - nebula.height/8;
+        nebulae[i].frame = 0;
+        nebulae[i].runningTime = 0.0;
+        nebulae[i].updateTime = 0.0;
+    }
 
-    AnimationData nebulae[2] { nebulaData , nebula2Data };
+    nebulae[0].position.x = windowDimensions[0];
+    nebulae[1].position.x = windowDimensions[0] + 300;
+    nebulae[2].position.x = windowDimensions[0] + 600;
+    
 
     int nebulaVelocity{-300}; // nebula X velocity in pixels per second
     
@@ -138,6 +137,9 @@ int main()
                 nebulae[0].frame = 0;
             }
         }
+
+
+        
 
         // update the nebula's running time
         nebulae[1].runningTime += deltaTime;
