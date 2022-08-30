@@ -60,6 +60,8 @@ int main()
         { 0.0 }                                                        // float runningTime
     };
 
+    AnimationData nebulae[2] { nebulaData , nebula2Data };
+
     int nebulaVelocity{-300}; // nebula X velocity in pixels per second
     
     // Set the target FPS
@@ -115,49 +117,49 @@ int main()
         }
 
         // update nebula position
-        nebulaData.position.x += nebulaVelocity * deltaTime;
+        nebulae[0].position.x += nebulaVelocity * deltaTime;
 
         // update the second nebula's position
-        nebula2Data.position.x += nebulaVelocity * deltaTime;
+        nebulae[1].position.x += nebulaVelocity * deltaTime;
 
         // update the nebula's running time
-        nebulaData.runningTime +=deltaTime;
+        nebulae[0].runningTime +=deltaTime;
 
         // update the nebula's animation
-        if(nebulaData.runningTime >= nebulaData.updateTime)
+        if(nebulae[0].runningTime >= nebulae[0].updateTime)
         {
-            nebulaData.runningTime = 0.0;
+            nebulae[0].runningTime = 0.0;
 
             // update animation frame
-            nebulaData.rectangle.x = nebulaData.frame * nebulaData.rectangle.width;
-            nebulaData.frame++;
-            if(nebulaData.frame > 7)
+            nebulae[0].rectangle.x = nebulae[0].frame * nebulae[0].rectangle.width;
+            nebulae[0].frame++;
+            if(nebulae[0].frame > 7)
             {
-                nebulaData.frame = 0;
+                nebulae[0].frame = 0;
             }
         }
 
         // update the nebula's running time
-        nebula2Data.runningTime += deltaTime;
+        nebulae[1].runningTime += deltaTime;
 
         // update the nebula's animation
-        if(nebula2Data.runningTime >= nebula2Data.updateTime)
+        if(nebulae[1].runningTime >= nebulae[1].updateTime)
         {
-            nebula2Data.runningTime = 0.0;
+            nebulae[1].runningTime = 0.0;
 
             // update animation frame
-            nebula2Data.rectangle.x = nebula2Data.frame * nebula2Data.rectangle.width;
-            nebula2Data.frame++;
-            if(nebula2Data.frame > 7)
+            nebulae[1].rectangle.x = nebulae[1].frame * nebulae[1].rectangle.width;
+            nebulae[1].frame++;
+            if(nebulae[1].frame > 7)
             {
-                nebula2Data.frame = 0;
+                nebulae[1].frame = 0;
             }
         }
 
         // Draw nebula
-        DrawTextureRec(nebula, nebulaData.rectangle, nebulaData.position, WHITE);
+        DrawTextureRec(nebula, nebulae[0].rectangle, nebulae[0].position, WHITE);
         // draw second nebula
-        DrawTextureRec(nebula, nebula2Data.rectangle, nebula2Data.position, WHITE);
+        DrawTextureRec(nebula, nebulae[1].rectangle, nebulae[1].position, WHITE);
 
         // Draw the player character
         DrawTextureRec(scarfy, scarfyData.rectangle, scarfyData.position, WHITE);
