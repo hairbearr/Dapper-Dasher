@@ -31,14 +31,20 @@ AnimationData updateAnimationData(AnimationData data, float deltaTime, int maxFr
     return data;
 }
 
-// void MoveBackground(Texture2D texture, float speed, float xVariable, float deltaTime)
-// {
-//     xVariable -= speed * deltaTime;
-//     if( xVariable <= - texture.width * 2 )
-//     {
-//         xVariable = 0.0;
-//     }
-// }
+void MoveBackground(Texture2D texture, float speed, float &xVariable, float deltaTime)
+{
+    xVariable -= speed * deltaTime;
+    if( xVariable <= - texture.width * 2 )
+    {
+        xVariable = 0.0;
+    }
+
+    // draw the background
+    Vector2 positionOne{xVariable, 0.0};
+    DrawTextureEx( texture, positionOne, 0.0, 2.0, WHITE );
+    Vector2 positionTwo{xVariable + texture.width * 2, 0.0};
+    DrawTextureEx( texture, positionTwo, 0.0, 2.0, WHITE );
+}
 
 int main()
 {
@@ -92,7 +98,7 @@ int main()
 
     float finishLinePosition{ nebulae[sizeOfNebulae-1].position.x + 300 };
 
-    int nebulaVelocity{-300}; // nebula X velocity in pixels per second
+    int nebulaVelocity{-250}; // nebula X velocity in pixels per second
     
     Texture2D background = LoadTexture("textures/far-buildings.png");
     float backgroundX{};
@@ -116,43 +122,9 @@ int main()
         BeginDrawing();
         ClearBackground(WHITE);
 
-        //MoveBackground(background, 40, backgroundX, deltaTime);
-
-        backgroundX -= 20 * deltaTime;
-        if( backgroundX <= - background.width * 2 )
-        {
-            backgroundX = 0.0;
-        }
-
-        midgroundX -= 40 * deltaTime;
-        if( midgroundX <= - midground.width * 2 )
-        {
-            midgroundX = 0.0;
-        }
-
-        foregroundX -= 80 * deltaTime;
-        if( foregroundX <= -foreground.width * 2 )
-        {
-            foregroundX = 0.0;
-        }
-
-
-        // draw the background
-        Vector2 backgroundOnePosition{backgroundX, 0.0};
-        DrawTextureEx( background, backgroundOnePosition, 0.0, 2.0, WHITE );
-        Vector2 backgroundTwoPosition{backgroundX + background.width * 2, 0.0};
-        DrawTextureEx( background, backgroundTwoPosition, 0.0, 2.0, WHITE );
-
-        Vector2 midgroundOnePosition{midgroundX, 0.0};
-        DrawTextureEx( midground, midgroundOnePosition, 0.0, 2.0, WHITE );
-        Vector2 midgroundTwoPosition{midgroundX + midground.width * 2, 0.0};
-        DrawTextureEx( midground, midgroundTwoPosition, 0.0, 2.0, WHITE );
-
-        Vector2 foregroundOnePosition{foregroundX, 0.0};
-        DrawTextureEx( foreground, foregroundOnePosition, 0.0, 2.0, WHITE );
-        Vector2 foregroundTwoPosition{foregroundX + foreground.width * 2, 0.0};
-        DrawTextureEx( foreground, foregroundTwoPosition, 0.0, 2.0, WHITE );
-
+        MoveBackground(background, 20, backgroundX, deltaTime);
+        MoveBackground(midground, 40, midgroundX, deltaTime);
+        MoveBackground(foreground, 80, foregroundX, deltaTime);
 
         // ground check
         if(isOnGround(scarfyData, windowDimensions[1]))
@@ -210,20 +182,24 @@ int main()
 
         if(collision)
         {
-            // death stuff
+            DrawText("Game Over!", windowDimensions[0]/4, windowDimensions[1]/2, 40, RED);
+        }
+        else if (scarfyData.position.x >= finishLinePosition)
+        {
+            DrawText("You Win!", windowDimensions[0]/4, windowDimensions[1]/2, 40, GREEN);
         }
         else
         {
             for (int i = 0; i < sizeOfNebulae; i++)
-        {
+            {
             // Draw nebula
             DrawTextureRec(nebula, nebulae[i].rectangle, nebulae[i].position, WHITE);
-        }
+            }
         
-        // Draw the player character
-        DrawTextureRec(scarfy, scarfyData.rectangle, scarfyData.position, WHITE);
+            // Draw the player character
+            DrawTextureRec(scarfy, scarfyData.rectangle, scarfyData.position, WHITE);
         }
-       
+
         // STOP DRAWING WINDOW
         EndDrawing();
     }
