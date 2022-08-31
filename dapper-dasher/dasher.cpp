@@ -31,6 +31,15 @@ AnimationData updateAnimationData(AnimationData data, float deltaTime, int maxFr
     return data;
 }
 
+// void MoveBackground(Texture2D texture, float speed, float xVariable, float deltaTime)
+// {
+//     xVariable -= speed * deltaTime;
+//     if( xVariable <= - texture.width * 2 )
+//     {
+//         xVariable = 0.0;
+//     }
+// }
+
 int main()
 {
     int windowDimensions[2];
@@ -81,6 +90,8 @@ int main()
         nebulae[i].position.x = windowDimensions[0] + (i*300);
     }
 
+    float finishLinePosition{ nebulae[sizeOfNebulae-1].position.x + 300 };
+
     int nebulaVelocity{-300}; // nebula X velocity in pixels per second
     
     Texture2D background = LoadTexture("textures/far-buildings.png");
@@ -103,8 +114,10 @@ int main()
         BeginDrawing();
         ClearBackground(WHITE);
 
+        //MoveBackground(background, 40, backgroundX, deltaTime);
+
         backgroundX -= 20 * deltaTime;
-        if( backgroundX <= -background.width * 2 )
+        if( backgroundX <= - background.width * 2 )
         {
             backgroundX = 0.0;
         }
@@ -121,6 +134,7 @@ int main()
             foregroundX = 0.0;
         }
 
+
         // draw the background
         Vector2 backgroundOnePosition{backgroundX, 0.0};
         DrawTextureEx( background, backgroundOnePosition, 0.0, 2.0, WHITE );
@@ -136,8 +150,6 @@ int main()
         DrawTextureEx( foreground, foregroundOnePosition, 0.0, 2.0, WHITE );
         Vector2 foregroundTwoPosition{foregroundX + foreground.width * 2, 0.0};
         DrawTextureEx( foreground, foregroundTwoPosition, 0.0, 2.0, WHITE );
-
-
 
 
         // ground check
@@ -173,6 +185,9 @@ int main()
             // update nebula position
             nebulae[i].position.x += nebulaVelocity * deltaTime;
         }
+
+        // update finish line position
+        finishLinePosition += nebulaVelocity * deltaTime;
 
         for (int i = 0; i < sizeOfNebulae; i++)
         {
