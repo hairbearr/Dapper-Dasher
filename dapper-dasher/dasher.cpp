@@ -103,6 +103,8 @@ int main()
     Texture2D foreground = LoadTexture("textures/foreground.png");
     float foregroundX{};
 
+    bool collision{};
+
     // Set the target FPS
     SetTargetFPS(60);
     while(!WindowShouldClose())
@@ -194,7 +196,25 @@ int main()
             nebulae[i] = updateAnimationData(nebulae[i], deltaTime, 7);
         }   
 
-        for (int i = 0; i < sizeOfNebulae; i++)
+        for (AnimationData nebula : nebulae)
+        {
+            float pad{50};
+            Rectangle nebulaRectangle { nebula.position.x + pad, nebula.position.y + pad, nebula.rectangle.width - (2 * pad), nebula.rectangle.height- (2 * pad) };
+            Rectangle scarfyRectangle { scarfyData.position.x, scarfyData.position.y, scarfyData.rectangle.width, scarfyData.rectangle.height };
+
+            if(CheckCollisionRecs(nebulaRectangle, scarfyRectangle))
+            {
+                collision = true;
+            }
+        }
+
+        if(collision)
+        {
+            // death stuff
+        }
+        else
+        {
+            for (int i = 0; i < sizeOfNebulae; i++)
         {
             // Draw nebula
             DrawTextureRec(nebula, nebulae[i].rectangle, nebulae[i].position, WHITE);
@@ -202,6 +222,7 @@ int main()
         
         // Draw the player character
         DrawTextureRec(scarfy, scarfyData.rectangle, scarfyData.position, WHITE);
+        }
        
         // STOP DRAWING WINDOW
         EndDrawing();
